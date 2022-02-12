@@ -1,0 +1,30 @@
+.card-container {
+  display: flex;
+  flex-direction: column;
+  width: 416px;
+  height: 264px;
+  margin: 8px;
+  background: green;
+  color: white;
+
+  .card-title{
+
+  }
+
+  .card-body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .card-footer {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+ 
+    .card-footer-table{
+      
+      
+    }
+    
+    }
+}

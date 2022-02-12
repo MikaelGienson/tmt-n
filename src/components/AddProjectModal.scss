@@ -1,0 +1,138 @@
+// imports
+@import '../style.scss';
+
+// mixins
+@mixin button-bg-col($bg, $col) {
+  background: $bg;
+  color: $col;
+    &:hover {
+    @if $col == black {
+      color: white;
+    }
+    background: black;
+    transition: all 0.3s ease;
+  }
+  
+  &:active {
+    background:darken($bg,25%);
+  } 
+}
+
+//variables
+$thumbnail-dim: 75px;
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4)
+}
+
+.modal {
+  @include centre;
+  position: fixed;
+  background-color: white;
+  display: inline-block;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  width: 400px;
+  min-height: 425px;
+  height: 525px;
+  z-index: 1000;
+  padding: 8px 16px 16px 16px;
+
+
+  .thumbnail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    vertical-align: middle;
+    width: 100%;
+
+    div {
+      margin-top: 6px;
+      margin-left: 2px;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 5px;
+      width: $thumbnail-dim;
+      height: $thumbnail-dim;
+      color: white;
+      font-size: 4em;
+    }
+  
+    button {
+      font-size: 16px;
+      margin-left: 16px;
+      border: none;
+      white-space: nowrap;
+      color: blue;
+      cursor: pointer;
+      background: none;
+      float: right;
+    }
+  }
+
+    .color-picker-container {
+      display: inline-block;
+      position: absolute;
+      height: 200px;
+      overflow: visible;
+    }
+
+    .popover {
+      position: absolute;
+      z-index: 2;
+      
+      .cover {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+      }
+    }
+    
+  
+  
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 32px;
+    
+  
+    .btn {
+      text-decoration:none;
+      border-radius: 5px;
+      font-size:2em;
+      width: 100px;
+      height: 50px;
+      font-family: "SegoeUI", sans-serif;
+      font-size: 24px;
+      text-align: center;
+      padding: 0;
+      margin: 0px 0px 0px 16px;
+     }
+  
+     .btn-blue-white {
+      @include button-bg-col(blue, white);
+   }
+   
+   .btn-none-black {
+     @include button-bg-col(transparent, black);
+     border: 2px solid black;
+   }
+  
+  }
+}
+
+
+
+  
+
+
+
+
