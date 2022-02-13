@@ -2,6 +2,7 @@
 import { FC, useRef, useState, useEffect, useContext } from "react";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import * as yup from "yup";
+import './LoginForm.scss'
 import axios from "../api/axios";
 import { AxiosError } from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,10 +14,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const LoginForm = () => {
   // const { setAuth } = useContext(AuthContext);
-  const [user, setUser] = useState<string>("");
-  const [pwd, setPwd] = useState<string>("");
+  const [user, setUser] = useState("");
+  const [pwd, setPwd] = useState("");
   const [errMsg, setErrorMsg] = useState<any>(null);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [success, setSuccess] = useState(false);
+  const [pwdVisibility, setPwdVisibility] = useState(true)
 
   const userRef = useRef<HTMLInputElement>(null!);
   const errRef = useRef<HTMLDivElement>(null);
@@ -90,20 +92,20 @@ const LoginForm = () => {
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group password">
               <label htmlFor="password">Password</label>
               <input
-                type="password"
+                type={pwdVisibility ? "text" : "password"}
                 id="password"
                 onChange={(e) => setPwd(e.target.value)}
                 value={pwd}
                 required
               />
-              <FontAwesomeIcon icon={['fas', 'eye']} />
+              <FontAwesomeIcon className='password-icon' icon={['fas', `${pwdVisibility ? 'eye-slash' : 'eye'}`]} onClick={() => setPwdVisibility(!pwdVisibility)} />
+            </div>
               <a href="#" className="not-remember">
                 I don't remember username or password
               </a>
-            </div>
           </div>
         </div>
         <div className="footer">

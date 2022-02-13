@@ -21,16 +21,16 @@ export default function App() {
 
       {/* <Private isLoggedIn={false} component={Profile} /> */}
 
-      <div className="container-x1">
-        {/* <TestSuites /> */}
+      {/* <div className="container-x1">
+        <TestSuites />
         <div className="table-responsive">
           <div className="table-wrapper">
-            {/* <TestContextProvider>
+            <TestContextProvider>
               <TestRunTable />
-            </TestContextProvider> */}
+            </TestContextProvider>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

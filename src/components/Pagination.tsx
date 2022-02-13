@@ -25,53 +25,32 @@ const Pagination = ({ pages, setCurrentPage }: IPaginationProps) => {
         Showing <b>5</b> out of <b>7</b> entries
       </div>
       <ul className="pagination">
-        <li
-          className={`${
-            currentButton === 1 ? "page-item disabled" : "page-item"
-          }`}
-        >
-          <a
-            href="#!"
-            onClick={() =>
-              setCurrentButton((prev) => (prev === 1 ? prev : prev - 1))
-            }
-          >
+        <li className={`${ currentButton === 1 ? "page-item disabled" : "page-item" }`}>
+          <a href="#!" onClick={() =>
+              setCurrentButton((prev) => (prev === 1 ? prev : prev - 1))}>
             Previous
           </a>
         </li>
-
         {numOfPages.map((page, index) => {
           return (
-            <li
-              key={index}
-              className={`${
-                currentButton === page ? "page-item active" : "page-item"
-              }`}
-            >
-              <a
-                href="#!"
-                className="page-link"
-                onClick={() => setCurrentButton(page)}
-              >
+            <li key={index} className={`${
+                currentButton === page ? "page-item active" : "page-item"}`}>
+              <a href="#!" className="page-link"
+                onClick={() => setCurrentButton(page)}>
                 {page}
               </a>
             </li>
           );
         })}
 
-        <li
-          className={`${
+        <li className={`${
             currentButton === numOfPages.length
               ? "page-item disabled"
               : "page-item"
           }`}
         >
-          <a
-            href="#!"
-            onClick={() =>
-              setCurrentButton((next) => (next === 1 ? next : next + 1))
-            }
-          >
+          <a href="#!" onClick={() =>
+              setCurrentButton((next) => (next === 1 ? next : next + 1))}>
             Next
           </a>
         </li>
@@ -80,30 +59,3 @@ const Pagination = ({ pages, setCurrentPage }: IPaginationProps) => {
   );
 };
 export default Pagination;
-
-/* 
-        <li className="page-item">
-          <a href="#!" className="page-link">
-            2
-          </a>
-        </li>
-        <li className="page-item active">
-          <a href="#!" className="page-link">
-            3
-          </a>
-        </li>
-        <li className="page-item">
-          <a href="#!" className="page-link">
-            4
-          </a>
-        </li>
-        <li className="page-item">
-          <a href="#!" className="page-link">
-            5
-          </a>
-        </li>
-        <li className="page-item">
-          <a href="#!" className="page-link">
-            Next
-          </a>
-        </li> */
