@@ -80,7 +80,6 @@ export const TestRunTable: React.FC = () => {
       >
         This is Modal Content!
       </AddProjectModal>
-      <LoginForm />
     </>
   );
 };

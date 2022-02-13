@@ -50,7 +50,7 @@ const Pagination = ({ pages, setCurrentPage }: IPaginationProps) => {
           }`}
         >
           <a href="#!" onClick={() =>
-              setCurrentButton((next) => (next === 1 ? next : next + 1))}>
+              setCurrentButton((next) => (next === 1 ? next + 1: next))}>
             Next
           </a>
         </li>
