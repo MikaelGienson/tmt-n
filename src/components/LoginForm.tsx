@@ -13,6 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // });
 
 const LoginForm = () => {
+  console.log('Login Form Mounted')
+
   // const { setAuth } = useContext(AuthContext);
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");

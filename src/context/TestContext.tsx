@@ -87,6 +87,7 @@ const TESTS = [
   }
 ];
 
+//sorting by asignee name
 const sortedTESTS: ITableData[] = TESTS.sort((a, b) =>
   a.assignee < b.assignee ? -1 : 1
 );

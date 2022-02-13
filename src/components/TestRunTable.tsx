@@ -6,15 +6,22 @@ import { ITableData, IColumns } from "../interfaces/Interfaces";
 import "./testRunTable.scss";
 import AddProjectModal from "./AddProjectModal";
 import Pagination from "./Pagination";
-import LoginForm from "./LoginForm";
+import Dropdown from "./Dropdown";
 
 export const TestRunTable: React.FC = () => {
-  const { testRunData, setTestRunData, columns } = useContext<ITestContext>(
+  const { testRunData, columns } = useContext<ITestContext>(
     TestContext
   );
 
+  // dropdown >>
+  const [value, setValue ] = useState<string | null>(null)
+  // dropdown <<
+
+  console.log("TestRunTable Mounted")
   //triggers modal on/off
   const [isOpen, setIsOpen] = useState(false);
+
+  const[ selectedVersion, setSelectedVersion ] = useState('Select Version')
 
   const [currentPage, setCurrentPage] = useState(1);
   const [testsPerPage] = useState(2);
@@ -27,6 +34,15 @@ export const TestRunTable: React.FC = () => {
     setIsOpen(true);
   }
 
+  function handleSelectedVersion(e: React.ChangeEvent<HTMLSelectElement>): void {
+    setSelectedVersion(e.target.value)
+  }
+
+  const filteredByVersion = testRunData.filter((testRun) => {
+    return testRun.version === selectedVersion
+  })
+
+  console.log(filteredByVersion)
   // const columns: IColumns[] = useMemo(() => columns, []);
   // const data: ITableData[] = useMemo(() => testsId, []);
 
@@ -51,7 +67,18 @@ export const TestRunTable: React.FC = () => {
   const totalPagesNum: number = Math.ceil(testRunData.length / testsPerPage);
 
   return (
-    <>
+      <>
+      <div style={{ width: 200 }}>
+        <Dropdown 
+        options={testRunData} 
+        prompt='Select test suite...'
+        value={value}
+        onChange={val => setValue(val)}
+        id='id'
+        label='assignee'
+        />
+      </div>
+      
       <table className="table table-striped table-hover table-borderless">
         <thead>
           <tr>
@@ -81,5 +108,5 @@ export const TestRunTable: React.FC = () => {
         This is Modal Content!
       </AddProjectModal>
     </>
-  );
+  )
 };

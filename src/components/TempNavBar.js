@@ -1,4 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
+import './TempNavBar.css'
 export default function TempNavBar() {
     return (
         <>
