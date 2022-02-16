@@ -71,7 +71,7 @@ export const TestRunTable: React.FC = () => {
       <div style={{ width: 200 }}>
         <Dropdown 
         options={testRunData} 
-        prompt='Select test suite...'
+        prompt='Select...'
         value={value}
         onChange={val => setValue(val)}
         id='id'

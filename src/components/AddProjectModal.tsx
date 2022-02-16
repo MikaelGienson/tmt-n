@@ -43,18 +43,22 @@ function AddProjectModal({ isOpen, setIsOpen, handleClose }: IAddProjectFormProp
   const [newProject, setNewProject] = useState<IProjectData>({
     projectName: "",
     projectDescription: "",
+    projectInitials: '',
     id: ""
   });
 
+  // updates the newProject state
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
 
   const { projectName, projectDescription } = newProject;
 
+  // submitts form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addProject(projectName, projectDescription);
+    const projectInitals: string = document.getElementById('project-initials')!.innerHTML ? document.getElementById('project-initials')!.innerHTML : 'XX'
+    addProject(projectName, projectDescription, projectInitals);
   };
 
   // adding new project <<
@@ -137,7 +141,7 @@ function AddProjectModal({ isOpen, setIsOpen, handleClose }: IAddProjectFormProp
               <span>{`${maxChars - charsCount}/${maxChars}`}</span>
             </div>
             <div className="thumbnail">
-              <div style={{backgroundColor: thumbnailColor}}>GG</div>
+              <div style={{backgroundColor: thumbnailColor}}><div className="text" contentEditable='true' id='project-initials'>GG</div></div>
               <button onClick={ handleColorClick }>Change thumbnail color</button>
             </div>
             <div className='color-picker-container'>

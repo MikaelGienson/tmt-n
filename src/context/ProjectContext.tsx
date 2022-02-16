@@ -8,15 +8,16 @@ type ProjectContextProviderProps = {
 };
 
 type IProject = {
-  projectName: string;
-  projectDescription: string;
+  projectName: string,
+  projectDescription: string,
+  projectInitials: string,
   id: string;
 };
 
 type IProjectContext = {
   projects: IProject[];
   setProjects: React.Dispatch<React.SetStateAction<IProjectData[]>>;
-  addProject: (projectName: string, projectDescription: string) => void;
+  addProject: (projectName: string, projectDescription: string, projectInitials: string) => void;
   deleteProject: (id: string) => void;
   updateProject: (id: string, updatedProject: IProject) => void;
 };
@@ -25,6 +26,7 @@ const PROJECTS = [
   {
     projectName: "TMT",
     projectDescription: "Very good project for very good people",
+    projectInitials: 'GG',
     id: uuid()
   }
 ];
@@ -44,9 +46,10 @@ export const ProjectContextProvider = ({
 
   const addProject = (
     projectName: string,
-    projectDescription: string
+    projectDescription: string,
+    projectInitials: string
   ): void => {
-    setProjects([...projects, { projectName, projectDescription, id: uuid() }]);
+    setProjects([...projects, { projectName, projectDescription, projectInitials, id: uuid() }]);
   };
 
   const deleteProject = (id: string): void => {

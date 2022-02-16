@@ -52,15 +52,25 @@ $thumbnail-dim: 75px;
     width: 100%;
 
     div {
-      margin-top: 6px;
-      margin-left: 2px;
-      display: inline-block;
-      vertical-align: middle;
+     
+      display: flex;
+      justify-content: center;
+      
+      align-items: center;
       border-radius: 5px;
       width: $thumbnail-dim;
       height: $thumbnail-dim;
       color: white;
-      font-size: 4em;
+      
+
+      div{
+        
+        font-size: 3em;
+        
+        [contenteditable]:focus {
+          outline: 0px solid transparent;
+        }
+      }
     }
   
     button {

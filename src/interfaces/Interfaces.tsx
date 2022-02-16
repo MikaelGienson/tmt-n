@@ -14,8 +14,9 @@ export type ITableData = {
 };
 
 export type IProjectData = {
-  projectName: string;
-  projectDescription: string;
+  projectName: string,
+  projectDescription: string,
+  projectInitials: string,
   id: string;
 };
 

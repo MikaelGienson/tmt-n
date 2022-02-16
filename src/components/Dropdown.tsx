@@ -1,7 +1,6 @@
 import './Dropdown.scss'
 import {ITableData} from '../interfaces/Interfaces'
-import { useState, useRef, useEffect, SyntheticEvent } from 'react'
-import { getByDisplayValue } from '@testing-library/react'
+import { useState, useRef, useEffect } from 'react'
 
 interface DropdownProps {
     options: ITableData[],
@@ -31,6 +30,7 @@ const Dropdown = ({options, prompt, value, onChange, id, label}: DropdownProps )
         return options.filter((option: any) => option[label].toLowerCase().indexOf(query.toLowerCase()) > -1)
     }
 
+    console.log(filter(options))
     function displayValue() {
         if(query.length > 0) return query;
         if(value) return value[label];
@@ -55,7 +55,7 @@ const Dropdown = ({options, prompt, value, onChange, id, label}: DropdownProps )
             </div>
             <div className={`options ${open ? "open" : null}`} >
                 {
-                    filter(options).map((option: any) => 
+                    options.map((option: any) => 
                     <div 
                         key={option[id]}
                         className={`option ${value === option[label] ? "selected" : null}`}
