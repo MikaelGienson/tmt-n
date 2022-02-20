@@ -1,0 +1,6 @@
+.dropdown-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(min-content, 2fr));
+  grid-template-rows: min-content;
+  grid-gap: 16px;
+}

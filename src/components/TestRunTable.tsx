@@ -6,43 +6,33 @@ import { ITableData, IColumns } from "../interfaces/Interfaces";
 import "./testRunTable.scss";
 import AddProjectModal from "./AddProjectModal";
 import Pagination from "./Pagination";
-import Dropdown from "./Dropdown";
+import Filters from "./Filters";
 
 export const TestRunTable: React.FC = () => {
-  const { testRunData, columns } = useContext<ITestContext>(
-    TestContext
-  );
+  //input data from context
+  const { testRunData, columns } = useContext<ITestContext>(TestContext);
 
-  // dropdown >>
-  const [value, setValue ] = useState<string | null>(null)
-  // dropdown <<
-
-  console.log("TestRunTable Mounted")
   //triggers modal on/off
   const [isOpen, setIsOpen] = useState(false);
 
-  const[ selectedVersion, setSelectedVersion ] = useState('Select Version')
+  // filtering >>
+  const [selectedVersion, setSelectedVersion] = useState("Select Version");
 
+  function handleSelectedVersion(
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void {
+    setSelectedVersion(e.target.value);
+  }
+
+  const filteredByVersion = testRunData.filter((testRun: ITableData) => {
+    return testRun.version === selectedVersion;
+  });
+  // filtering <<
+
+  // pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [testsPerPage] = useState(2);
 
-  function modalHandleClose(): void {
-    setIsOpen(false);
-  }
-
-  function modalHandleOpen(): void {
-    setIsOpen(true);
-  }
-
-  function handleSelectedVersion(e: React.ChangeEvent<HTMLSelectElement>): void {
-    setSelectedVersion(e.target.value)
-  }
-
-  const filteredByVersion = testRunData.filter((testRun) => {
-    return testRun.version === selectedVersion
-  })
-
-  console.log(filteredByVersion)
   // const columns: IColumns[] = useMemo(() => columns, []);
   // const data: ITableData[] = useMemo(() => testsId, []);
 
@@ -52,33 +42,23 @@ export const TestRunTable: React.FC = () => {
   //   modalHandleClose()
   // } [projects])
 
-  const columnsHeaders: string[] = Array.from(
-    columns.map((column) => {
-      return column.Header;
-    })
-  );
+  //getting column headers
+  const columnsHeaders: string[] = columns.map((column: IColumns) => {
+    return column.Header;
+  });
 
+  // variables for pagination component
   const indexOfLastTest: number = currentPage * testsPerPage;
   const indexOfFirstTest: number = indexOfLastTest - testsPerPage;
   const currentTests: ITableData[] = testRunData.slice(
     indexOfFirstTest,
     indexOfLastTest
   );
-  const totalPagesNum: number = Math.ceil(testRunData.length / testsPerPage);
+  const totalPagesNum: number = Math.ceil(currentTests.length / testsPerPage);
 
   return (
-      <>
-      <div style={{ width: 200 }}>
-        <Dropdown 
-        options={testRunData} 
-        prompt='Select...'
-        value={value}
-        onChange={val => setValue(val)}
-        id='id'
-        label='assignee'
-        />
-      </div>
-      
+    <>
+      <Filters data={testRunData} />
       <table className="table table-striped table-hover table-borderless">
         <thead>
           <tr>
@@ -98,15 +78,15 @@ export const TestRunTable: React.FC = () => {
         </tbody>
       </table>
       <Pagination pages={totalPagesNum} setCurrentPage={setCurrentPage} />
-      <button onClick={modalHandleOpen}>Click to Open Modal</button>
+      <button onClick={() => setIsOpen(true)}>Click to Open Modal</button>
 
       <AddProjectModal
-        handleClose={modalHandleClose}
+        handleClose={() => setIsOpen(false)}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
       >
         This is Modal Content!
       </AddProjectModal>
     </>
-  )
+  );
 };

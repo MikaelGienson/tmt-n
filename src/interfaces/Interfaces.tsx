@@ -3,20 +3,20 @@ export type ITableData = {
   testSuiteName: string;
   version: string;
   assignee: string;
-  failed: number;
-  passed: number;
-  total: number;
-  PFR: number;
+  failed: string;
+  passed: string;
+  total: string;
+  PFR: string;
   status: string;
   startDate: string;
   endDate: string;
-  id: string;
+  [id: string]: string;
 };
 
 export type IProjectData = {
-  projectName: string,
-  projectDescription: string,
-  projectInitials: string,
+  projectName: string;
+  projectDescription: string;
+  projectInitials: string;
   id: string;
 };
 
