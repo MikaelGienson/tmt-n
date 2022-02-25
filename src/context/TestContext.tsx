@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer, useState } from "react";
 import { ITableData, IColumns } from "../interfaces/Interfaces";
 import React from "react";
 import { v4 as uuid } from "uuid";
@@ -11,6 +11,8 @@ export type ITestContext = {
   testRunData: ITableData[];
   setTestRunData: React.Dispatch<React.SetStateAction<ITableData[]>>;
   columns: IColumns[];
+  state: ITableData[];
+  dispatch: React.Dispatch<IQueryAction>;
 };
 
 const COLUMNS = [
@@ -31,13 +33,13 @@ const COLUMNS = [
 const TESTS = [
   {
     TR: "TR-74",
-    testSuiteName: "Regression",
+    testSuiteName: "Agression",
     version: "0.9.1",
     assignee: "Agata Ciapata",
-    failed: 10,
-    passed: 145,
-    total: 149,
-    PFR: 0.93,
+    failed: "10",
+    passed: "145",
+    total: "149",
+    PFR: "0.93",
     status: "failed",
     startDate: "2022/01/23 18:55",
     endDate: "2022/01/23 18:58",
@@ -45,13 +47,13 @@ const TESTS = [
   },
   {
     TR: "TR-75",
-    testSuiteName: "Regression",
+    testSuiteName: "Secession",
     version: "0.9.2",
     assignee: "Michał Zdychał",
-    failed: 5,
-    passed: 10,
-    total: 15,
-    PFR: 0.33,
+    failed: "5",
+    passed: "10",
+    total: "15",
+    PFR: "0.33",
     status: "failed",
     startDate: "2022/01/24 19:05",
     endDate: "2022/01/24 19:07",
@@ -59,13 +61,13 @@ const TESTS = [
   },
   {
     TR: "TR-76",
-    testSuiteName: "Regression",
+    testSuiteName: "Progression",
     version: "0.5.2",
     assignee: "Maria Awaria",
-    failed: 0,
-    passed: 100,
-    total: 100,
-    PFR: 1,
+    failed: "0",
+    passed: "100",
+    total: "100",
+    PFR: "1",
     status: "passed",
     startDate: "2022/01/25 14:15",
     endDate: "2022/01/25 14:27",
@@ -76,16 +78,39 @@ const TESTS = [
     testSuiteName: "Regression",
     version: "0.6.2",
     assignee: "Anita Wypita",
-    failed: 90,
-    passed: 10,
-    total: 100,
-    PFR: 0.1,
+    failed: "90",
+    passed: "10",
+    total: "100",
+    PFR: "0.1",
     status: "failed",
     startDate: "2022/01/25 17:14",
     endDate: "2022/01/25 17:24",
     id: uuid()
   }
 ];
+
+interface IQueryAction {
+  type: string;
+  payload: ITableData[];
+}
+
+interface IQueryState {
+  filteredData: ITableData[];
+}
+
+const initialState = TESTS;
+
+const reducer = (state: IQueryState, action: IQueryAction) => {
+  let filteredData = [];
+  switch (action.type) {
+    case "UPDATE_DATA":
+      filteredData = action.payload;
+
+      return filteredData;
+    default:
+      return state;
+  }
+};
 
 //sorting by asignee name
 const sortedTESTS: ITableData[] = TESTS.sort((a, b) =>
@@ -95,15 +120,28 @@ const sortedTESTS: ITableData[] = TESTS.sort((a, b) =>
 export const TestContext = createContext<ITestContext>({
   testRunData: TESTS,
   setTestRunData: () => {},
-  columns: COLUMNS
+  columns: COLUMNS,
+  state: initialState,
+  dispatch: () => undefined
 });
 
 export const TestContextProvider = ({ children }: TestContextProviderProps) => {
-  const [testRunData, setTestRunData] = useState<ITableData[]>(sortedTESTS);
+  const [testRunData, setTestRunData] = useState<ITableData[]>(TESTS);
   const columns: IColumns[] = COLUMNS;
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  console.log(state);
 
   return (
-    <TestContext.Provider value={{ testRunData, setTestRunData, columns }}>
+    <TestContext.Provider
+      value={{
+        testRunData,
+        setTestRunData,
+        columns,
+        state,
+        dispatch
+      }}
+    >
       {children}
     </TestContext.Provider>
   );

@@ -10,24 +10,10 @@ import Filters from "./Filters";
 
 export const TestRunTable: React.FC = () => {
   //input data from context
-  const { testRunData, columns } = useContext<ITestContext>(TestContext);
+  const { testRunData, columns, state } = useContext<ITestContext>(TestContext);
 
   //triggers modal on/off
   const [isOpen, setIsOpen] = useState(false);
-
-  // filtering >>
-  const [selectedVersion, setSelectedVersion] = useState("Select Version");
-
-  function handleSelectedVersion(
-    e: React.ChangeEvent<HTMLSelectElement>
-  ): void {
-    setSelectedVersion(e.target.value);
-  }
-
-  const filteredByVersion = testRunData.filter((testRun: ITableData) => {
-    return testRun.version === selectedVersion;
-  });
-  // filtering <<
 
   // pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,11 +36,11 @@ export const TestRunTable: React.FC = () => {
   // variables for pagination component
   const indexOfLastTest: number = currentPage * testsPerPage;
   const indexOfFirstTest: number = indexOfLastTest - testsPerPage;
-  const currentTests: ITableData[] = testRunData.slice(
+  const currentTests: ITableData[] = state.slice(
     indexOfFirstTest,
     indexOfLastTest
   );
-  const totalPagesNum: number = Math.ceil(currentTests.length / testsPerPage);
+  const totalPagesNum: number = Math.ceil(state.length / testsPerPage);
 
   return (
     <>
@@ -78,8 +64,8 @@ export const TestRunTable: React.FC = () => {
         </tbody>
       </table>
       <Pagination pages={totalPagesNum} setCurrentPage={setCurrentPage} />
-      <button onClick={() => setIsOpen(true)}>Click to Open Modal</button>
 
+      <button onClick={() => setIsOpen(true)}>Click to Open Modal</button>
       <AddProjectModal
         handleClose={() => setIsOpen(false)}
         setIsOpen={setIsOpen}
