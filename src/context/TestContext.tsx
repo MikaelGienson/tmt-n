@@ -13,6 +13,7 @@ export type ITestContext = {
   columns: IColumns[];
   state: ITableData[];
   dispatch: React.Dispatch<IQueryAction>;
+
 };
 
 const COLUMNS = [
@@ -89,21 +90,26 @@ const TESTS = [
   }
 ];
 
-interface IQueryAction {
-  type: string;
-  payload: ITableData[];
+enum UserActionType {
+  UPDATE_DATA = "UPDATE_DATA",}
+
+type IQueryState = ITableData[]
+
+type IQueryAction = {
+  type: typeof UserActionType.UPDATE_DATA; payload: ITableData[];
 }
 
-interface IQueryState {
-  filteredData: ITableData[];
-}
+export const setData = (payload: ITableData[]): IQueryAction => ({
+  type: UserActionType.UPDATE_DATA,
+  payload,
+})
 
-const initialState = TESTS;
+const initialState: ITableData[] = TESTS;
 
-const reducer = (state: IQueryState, action: IQueryAction) => {
-  let filteredData = [];
+const reducer = (state: IQueryState, action: IQueryAction): ITableData[] => {
+  let filteredData: ITableData[] = [];
   switch (action.type) {
-    case "UPDATE_DATA":
+    case UserActionType.UPDATE_DATA:
       filteredData = action.payload;
 
       return filteredData;
@@ -122,14 +128,14 @@ export const TestContext = createContext<ITestContext>({
   setTestRunData: () => {},
   columns: COLUMNS,
   state: initialState,
-  dispatch: () => undefined
+  dispatch: () => undefined,
 });
 
 export const TestContextProvider = ({ children }: TestContextProviderProps) => {
   const [testRunData, setTestRunData] = useState<ITableData[]>(TESTS);
   const columns: IColumns[] = COLUMNS;
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  
   console.log(state);
 
   return (

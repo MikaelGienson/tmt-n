@@ -4,6 +4,7 @@ import { useState, useContext, useMemo, useEffect } from "react";
 import { TestContext, ITestContext } from "../context/TestContext";
 import "./Filters.scss";
 import moment from "moment";
+import {setData} from '../context/TestContext'
 
 interface ISortAndFilterProps {
   data: ITableData[];
@@ -67,7 +68,7 @@ const Filters = ({ data }: ISortAndFilterProps) => {
   );
 
   useEffect(() => {
-    dispatch({ type: "UPDATE_DATA", payload: filteredData });
+    dispatch(setData(filteredData));
   }, [filteredData]);
 
   // console.log(filterValues);
