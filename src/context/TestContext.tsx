@@ -91,7 +91,7 @@ const TESTS = [
 ];
 
 enum UserActionType {
-  UPDATE_DATA = "UPDATE_DATA",}
+  UPDATE_DATA = "UPDATE_DATA"}
 
 type IQueryState = ITableData[]
 

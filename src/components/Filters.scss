@@ -3,4 +3,57 @@
   grid-template-columns: repeat(4, minmax(min-content, 2fr));
   grid-template-rows: min-content;
   grid-gap: 16px;
+
+  .status-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    
+    .button {
+      width: 55px;
+      height: 20px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      border: solid;
+      border-radius: 5px;
+
+
+    }
+  }
 }
+
+.datepicker {
+  border: black;
+  margin: 0;
+  padding: 0;
+  color: black;
+  z-index: 10;
+}
+
+.react-datepicker-wrapper{
+  margin-top: 6px;
+  height: 40px;
+  padding-left: 8px;
+  font-size: 16px;
+  font-family: "SegoeUI", sans-serif;
+  border: solid 1px;
+  border-radius: 5px;
+  position: relative;
+  transition: all 250ms ease-in-out;
+  width: 100%;
+
+  box-sizing: border-box;
+  background-color: white;
+  display: flex;
+  align-items: center;
+
+  .react-datepicker__input-container input{
+    border: none;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+  }
+
+}
+
+
