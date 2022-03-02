@@ -118,7 +118,7 @@ const reducer = (state: IQueryState, action: IQueryAction): ITableData[] => {
   }
 };
 
-//sorting by asignee name
+//sorting by asignee name - not in use yet
 const sortedTESTS: ITableData[] = TESTS.sort((a, b) =>
   a.assignee < b.assignee ? -1 : 1
 );

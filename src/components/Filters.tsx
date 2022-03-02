@@ -1,12 +1,11 @@
 import Dropdown from "./Dropdown";
-import { ITableData, IColumns } from "../interfaces/Interfaces";
-import { useState, useContext, useMemo, useEffect, forwardRef } from "react";
-import { TestContext, ITestContext } from "../context/TestContext";
+import { ITableData } from "../interfaces/Interfaces";
+import { useState, useContext, useEffect } from "react";
+import { TestContext, setData } from "../context/TestContext";
 import "./Filters.scss";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import {setData} from '../context/TestContext'
 
 interface ISortAndFilterProps {
   data: ITableData[];
@@ -28,6 +27,14 @@ const dateFormat = "dd/MM/yyyy";
 const Filters = ({ data }: ISortAndFilterProps) => {
   const { dispatch } = useContext(TestContext);
 
+  const [filterBtns, setFilterBtns] = useState({
+    passed: false,
+    failed: false,
+    all: true
+  });
+
+  // const [failed, setFailed] = useState(false);
+
   const [filterValues, setFilterValues] = useState<IFilterValues>({
     assigneeValue: "",
     testSuiteNameValue: "",
@@ -46,6 +53,7 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       }
     });
     setFilteredData(filteredData);
+    console.log(filteredData);
   };
 
   const filterByVersion = (version: string) => {
@@ -117,19 +125,42 @@ const Filters = ({ data }: ISortAndFilterProps) => {
   };
 
   const handleFailedClick = () => {
-    const filteredData = data.filter((item) => {
-      if (item.status.toLowerCase() === "failed") {
-        return item;
-      }
-    });
+    setFilterBtns({ passed: false, failed: !filterBtns.failed, all: false });
+
+    const filteredData = filterBtns.failed
+      ? data.filter((item) => {
+          if (item.status.toLowerCase() === "failed") {
+            return item;
+          }
+        })
+      : data;
+
     setFilteredData(filteredData);
+  };
+
+  const handlePassedClick = () => {
+    setFilterBtns({ passed: !filterBtns.passed, failed: false, all: false });
+
+    const filteredData = filterBtns.passed
+      ? data.filter((item) => {
+          if (item.status.toLowerCase() === "passed") {
+            return item;
+          }
+        })
+      : data;
+
+    setFilteredData(filteredData);
+  };
+
+  const handleAllClick = () => {
+    setFilterBtns({ passed: false, failed: false, all: !filterBtns.all });
+
+    setFilteredData(data);
   };
 
   useEffect(() => {
     dispatch(setData(filteredData));
   }, [filteredData]);
-
-
 
   return (
     <div className="dropdown-container">
@@ -170,8 +201,12 @@ const Filters = ({ data }: ISortAndFilterProps) => {
         <button className="button" onClick={handleFailedClick}>
           Failed
         </button>
-        <button className="button">Passed</button>
-        <button className="button">All</button>
+        <button className="button" onClick={handlePassedClick}>
+          Passed
+        </button>
+        <button className="button" onClick={handleAllClick}>
+          All
+        </button>
       </div>
       <div className="datepicker">
         <label>Select Start Date From</label>
@@ -228,12 +263,19 @@ const Filters = ({ data }: ISortAndFilterProps) => {
           placeholderText={"Select End Date To"}
         />
       </div>
+      {/* <form>
+        <label>Car Delivery Date: </label>
+        <input
+          type="date"
+          id="id-date"
+          name="name-date"
+          value="2020-07-22"
+          min="2020-01-01"
+          max="2030-12-31"
+        />
+      </form> */}
     </div>
   );
 };
 
 export default Filters;
-
-
-
-

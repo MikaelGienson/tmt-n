@@ -14,9 +14,9 @@ const Pagination = ({ pages, setCurrentPage }: IPaginationProps) => {
 
   const [currentButton, setCurrentButton] = useState(1);
 
-  // switching between displayed table pages
+  // switching between table pages
   useEffect(() => {
-    setCurrentPage(currentButton);
+    setCurrentPage(numOfPages.length === 1 ? 1 : currentButton );
   }, [currentButton, setCurrentPage]);
 
   return (

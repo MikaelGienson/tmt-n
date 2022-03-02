@@ -1,6 +1,6 @@
 import "./Dropdown.scss";
 import { ITableData } from "../interfaces/Interfaces";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { MouseEvent } from "react";
 
 interface DropdownProps {
@@ -52,6 +52,7 @@ const Dropdown = ({
 
   // displays the value in the placeholder
   function displayValue(): string {
+    if (query.length > 0) return query;
     if (value) return value;
     return "";
   }
@@ -67,6 +68,11 @@ const Dropdown = ({
     </div>
   ));
 
+  function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(e.target.value);
+    onChange("");
+  }
+
   useEffect(() => {
     onChange(query);
   }, [query]);
@@ -81,10 +87,7 @@ const Dropdown = ({
             type="text"
             placeholder={value ? value : prompt}
             value={displayValue()}
-            onChange={(e) => {
-              setOpen(true);
-              setQuery(e.target.value);
-            }}
+            onChange={(e) => handleOnChange(e)}
             onClick={() => toggle}
           />
         </div>
