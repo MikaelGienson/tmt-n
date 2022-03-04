@@ -135,8 +135,6 @@ export const TestContextProvider = ({ children }: TestContextProviderProps) => {
   const [testRunData, setTestRunData] = useState<ITableData[]>(TESTS);
   const columns: IColumns[] = COLUMNS;
   const [state, dispatch] = useReducer(reducer, initialState);
-  
-  console.log(state);
 
   return (
     <TestContext.Provider

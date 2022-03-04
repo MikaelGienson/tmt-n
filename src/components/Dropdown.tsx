@@ -32,29 +32,20 @@ const Dropdown = ({
 
   const ref = useRef<HTMLInputElement>(null);
 
-  // toggles on and off the dropdown on click
-  const toggle: EventListener = (e: MouseEvent | Event) => {
+  const toggleDropdown: EventListener = (e: MouseEvent | Event) => {
     e.preventDefault();
     setOpen(e && e.target === ref.current);
   };
 
   // handles closing dropdown on click outside
   useEffect(() => {
-    document.addEventListener("click", toggle);
-    return () => document.removeEventListener("click", toggle);
+    document.addEventListener("click", toggleDropdown);
+    return () => document.removeEventListener("click", toggleDropdown);
   }, []);
 
-  // handles selecting option from the dropdown
-  function selectOption(option: ITableData) {
+  function selectDropdownOption(option: ITableData) {
     onChange(option[label]);
     setOpen(false);
-  }
-
-  // displays the value in the placeholder
-  function displayValue(): string {
-    if (query.length > 0) return query;
-    if (value) return value;
-    return "";
   }
 
   // list of displayed values in the dropdown
@@ -62,7 +53,7 @@ const Dropdown = ({
     <div
       key={option[id]}
       className={`option ${value === option[label] ? "selected" : null}`}
-      onClick={() => selectOption(option)}
+      onClick={() => selectDropdownOption(option)}
     >
       {option[label]}
     </div>
@@ -86,9 +77,12 @@ const Dropdown = ({
             ref={ref}
             type="text"
             placeholder={value ? value : prompt}
-            value={displayValue()}
-            onChange={(e) => handleOnChange(e)}
-            onClick={() => toggle}
+            value={value}
+            onChange={(e) => {
+              handleOnChange(e);
+              setOpen(true);
+            }}
+            onClick={() => toggleDropdown}
           />
         </div>
         <div className={`arrow ${open ? "open" : null}`} />

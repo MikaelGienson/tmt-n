@@ -14,10 +14,22 @@
       height: 20px;
       margin-bottom: 8px;
       text-decoration: none;
-      border: solid;
+      border: solid 0.5px;
       border-radius: 5px;
+      color: black;
+    }
+    .button.failed {
+      color: red;
+    }
 
+    .button.passed {
+      color: green
+    }
 
+    .button.all {
+      border: black;
+      background-color: grey;
+      color: white;
     }
   }
 }

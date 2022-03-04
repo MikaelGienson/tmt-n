@@ -1,17 +1,18 @@
 import Dropdown from "./Dropdown";
-import { ITableData } from "../interfaces/Interfaces";
-import { useState, useContext, useEffect } from "react";
-import { TestContext, setData } from "../context/TestContext";
+import { ITableData, IColumns } from "../interfaces/Interfaces";
+import { useState, useContext, useMemo, useEffect, forwardRef } from "react";
+import { TestContext, ITestContext } from "../context/TestContext";
 import "./Filters.scss";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import {setData} from '../context/TestContext'
 
 interface ISortAndFilterProps {
   data: ITableData[];
 }
 
-interface IFilterValues {
+type IFilterValues = {
   assigneeValue: string;
   testSuiteNameValue: string;
   versionValue: string;
@@ -19,21 +20,15 @@ interface IFilterValues {
   endDateFromValue: Date | null;
   startDateToValue: Date | null;
   endDateToValue: Date | null;
-}
+  failed: boolean;
+  passed: boolean;
+  all: boolean;
+};
 
-// date format for the datepicker
-const dateFormat = "dd/MM/yyyy";
+const datepickerDateFormat = "dd/MM/yyyy";
 
 const Filters = ({ data }: ISortAndFilterProps) => {
   const { dispatch } = useContext(TestContext);
-
-  const [filterBtns, setFilterBtns] = useState({
-    passed: false,
-    failed: false,
-    all: true
-  });
-
-  // const [failed, setFailed] = useState(false);
 
   const [filterValues, setFilterValues] = useState<IFilterValues>({
     assigneeValue: "",
@@ -42,121 +37,116 @@ const Filters = ({ data }: ISortAndFilterProps) => {
     startDateFromValue: null,
     endDateFromValue: null,
     startDateToValue: null,
-    endDateToValue: null
+    endDateToValue: null,
+    failed: false,
+    passed: false,
+    all: false
   });
   const [filteredData, setFilteredData] = useState(data);
 
-  const filterByAssignee = (assignee: string) => {
-    const filteredData = data.filter((item) => {
-      if (item.assignee.toLowerCase().includes(assignee.toLowerCase())) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-    console.log(filteredData);
-  };
-
-  const filterByVersion = (version: string) => {
-    const filteredData = data.filter((item) => {
-      if (item.version.toLowerCase().includes(version.toLowerCase())) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-  };
-
-  const filterByTestSuiteName = (testSuiteName: string) => {
-    const filteredData = data.filter((item) => {
-      if (
-        item.testSuiteName.toLowerCase().includes(testSuiteName.toLowerCase())
-      ) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-  };
-
-  const filterByStartDateFrom = (startDateFrom: Date | null) => {
-    const filteredData = data.filter((item) => {
-      if (
-        moment(item.startDate).isSameOrAfter(startDateFrom) ||
-        startDateFrom === null
-      ) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-  };
-
-  const filterByStartDateTo = (startDateTo: Date | null) => {
-    const filteredData = data.filter((item) => {
-      if (
-        moment(item.startDate).isSameOrBefore(startDateTo) ||
-        startDateTo === null
-      ) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-  };
-
-  const filterByEndDateFrom = (endDateFrom: Date | null) => {
-    const filteredData = data.filter((item) => {
-      if (
-        moment(item.endDate).isSameOrAfter(endDateFrom, "day") ||
-        endDateFrom === null
-      ) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-  };
-
-  const filterByEndDateTo = (endDateTo: Date | null) => {
-    const filteredData = data.filter((item) => {
-      if (
-        moment(item.endDate).isSameOrBefore(endDateTo, "day") ||
-        endDateTo === null
-      ) {
-        return item;
-      }
-    });
-    setFilteredData(filteredData);
-  };
+  const {
+    assigneeValue,
+    testSuiteNameValue,
+    versionValue,
+    startDateFromValue,
+    endDateFromValue,
+    startDateToValue,
+    endDateToValue,
+    failed,
+    passed,
+    all
+  } = filterValues;
 
   const handleFailedClick = () => {
-    setFilterBtns({ passed: false, failed: !filterBtns.failed, all: false });
-
-    const filteredData = filterBtns.failed
-      ? data.filter((item) => {
-          if (item.status.toLowerCase() === "failed") {
-            return item;
-          }
-        })
-      : data;
-
-    setFilteredData(filteredData);
+    setFilterValues({
+      ...filterValues,
+      failed: !failed,
+      passed: false,
+    });
   };
 
   const handlePassedClick = () => {
-    setFilterBtns({ passed: !filterBtns.passed, failed: false, all: false });
-
-    const filteredData = filterBtns.passed
-      ? data.filter((item) => {
-          if (item.status.toLowerCase() === "passed") {
-            return item;
-          }
-        })
-      : data;
-
-    setFilteredData(filteredData);
+    setFilterValues({ ...filterValues, passed: !passed, failed: false });
   };
 
   const handleAllClick = () => {
-    setFilterBtns({ passed: false, failed: false, all: !filterBtns.all });
-
-    setFilteredData(data);
+    setFilterValues({
+      ...filterValues,
+      passed: false,
+      failed: false
+    });
   };
+
+  const filterByAssignee = (item: ITableData) => {
+    return item.assignee.toLowerCase().includes(assigneeValue.toLowerCase());
+  };
+
+  const filterByTestSuiteName = (item: ITableData) => {
+    return item.testSuiteName
+      .toLowerCase()
+      .includes(testSuiteNameValue.toLowerCase());
+  };
+
+  const filterByVersion = (item: ITableData) => {
+    return item.version.toLowerCase().includes(versionValue.toLowerCase());
+  };
+  const filterByStartDateFromValue = (item: ITableData) => {
+    return (
+      moment(item.startDate).isSameOrAfter(startDateFromValue) ||
+      startDateFromValue === null
+    );
+  };
+
+  const filterByStartDateToValue = (item: ITableData) => {
+    return (
+      moment(item.startDate).isSameOrBefore(startDateToValue) ||
+      startDateToValue === null
+    );
+  };
+
+  const filterByEndDateFromValue = (item: ITableData) => {
+    return (
+      moment(item.endDate).isSameOrAfter(endDateFromValue, "day") ||
+      endDateFromValue === null
+    );
+  };
+
+  const filterByEndDateToValue = (item: ITableData) => {
+    return (
+      moment(item.endDate).isSameOrBefore(endDateToValue, "day") ||
+      endDateToValue === null
+    );
+  };
+  const filterByFailedValue = (item: ITableData) => {
+    return failed === true ? item.status.toLowerCase() === "failed" : item;
+  };
+
+  const filterByPassedValue = (item: ITableData) => {
+    return passed === true ? item.status.toLowerCase() === "passed" : item;
+  };
+  const filterByAllValue = (item: ITableData) => {
+    return all === true
+      ? item.status.toLowerCase() === ("passed" || "failed")
+      : item;
+  };
+
+  const filterFunctions = [
+    filterByAssignee,
+    filterByTestSuiteName,
+    filterByVersion,
+    filterByStartDateFromValue,
+    filterByStartDateToValue,
+    filterByEndDateFromValue,
+    filterByEndDateToValue,
+    filterByFailedValue,
+    filterByPassedValue,
+    filterByAllValue
+  ];
+
+  useEffect(() => {
+    setFilteredData(data.filter((v) => filterFunctions.every((f) => f(v))));
+    dispatch(setData(filteredData));
+  }, [filterValues]);
 
   useEffect(() => {
     dispatch(setData(filteredData));
@@ -167,9 +157,8 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       <Dropdown
         options={filteredData}
         prompt="Select Assignee"
-        value={filterValues.assigneeValue}
+        value={assigneeValue}
         onChange={(val) => {
-          filterByAssignee(val);
           setFilterValues({ ...filterValues, assigneeValue: val });
         }}
         id="id"
@@ -178,9 +167,8 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       <Dropdown
         options={filteredData}
         prompt="Select Test Suite Name"
-        value={filterValues.testSuiteNameValue}
+        value={testSuiteNameValue}
         onChange={(val) => {
-          filterByTestSuiteName(val);
           setFilterValues({ ...filterValues, testSuiteNameValue: val });
         }}
         id="id"
@@ -189,35 +177,37 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       <Dropdown
         options={filteredData}
         prompt="Select Version"
-        value={filterValues.versionValue}
+        value={versionValue}
         onChange={(val) => {
-          filterByVersion(val);
           setFilterValues({ ...filterValues, versionValue: val });
         }}
         id="id"
         label="version"
       />
       <div className="status-buttons">
-        <button className="button" onClick={handleFailedClick}>
+        <button
+          className={failed ? "button failed" : "button"}
+          onClick={handleFailedClick}
+        >
           Failed
         </button>
-        <button className="button" onClick={handlePassedClick}>
+        <button className={passed ? "button passed" : "button"}
+         onClick={handlePassedClick}>
           Passed
         </button>
-        <button className="button" onClick={handleAllClick}>
+        <button className={(!passed && !failed )? "button all" : "button"} onClick={handleAllClick}>
           All
         </button>
       </div>
       <div className="datepicker">
         <label>Select Start Date From</label>
         <DatePicker
-          selected={filterValues.startDateFromValue}
+          selected={startDateFromValue}
           onChange={(val) => {
-            filterByStartDateFrom(val);
             setFilterValues({ ...filterValues, startDateFromValue: val });
           }}
           className={"react-datepicker"}
-          dateFormat={dateFormat}
+          dateFormat={datepickerDateFormat}
           placeholderText={"Select Start Date From"}
         />
       </div>
@@ -225,13 +215,12 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       <div className="datepicker">
         <label>Select Start Date To</label>
         <DatePicker
-          selected={filterValues.startDateToValue}
+          selected={startDateToValue}
           onChange={(val) => {
-            filterByStartDateTo(val);
             setFilterValues({ ...filterValues, startDateToValue: val });
           }}
           className={"react-datepicker"}
-          dateFormat={dateFormat}
+          dateFormat={datepickerDateFormat}
           placeholderText={"Select Start Date To"}
         />
       </div>
@@ -239,13 +228,12 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       <div className="datepicker">
         <label>Select End Date From</label>
         <DatePicker
-          selected={filterValues.endDateFromValue}
+          selected={endDateFromValue}
           onChange={(val) => {
-            filterByEndDateFrom(val);
             setFilterValues({ ...filterValues, endDateFromValue: val });
           }}
           className={"react-datepicker"}
-          dateFormat={dateFormat}
+          dateFormat={datepickerDateFormat}
           placeholderText={"Select End Date From"}
         />
       </div>
@@ -253,13 +241,12 @@ const Filters = ({ data }: ISortAndFilterProps) => {
       <div className="datepicker">
         <label>Select End Date To</label>
         <DatePicker
-          selected={filterValues.endDateToValue}
+          selected={endDateToValue}
           onChange={(val) => {
-            filterByEndDateTo(val);
             setFilterValues({ ...filterValues, endDateToValue: val });
           }}
           className={"react-datepicker"}
-          dateFormat={dateFormat}
+          dateFormat={datepickerDateFormat}
           placeholderText={"Select End Date To"}
         />
       </div>
