@@ -7,7 +7,7 @@ import "./testRunTable.scss";
 import AddProjectModal from "./AddProjectModal";
 import Pagination from "./Pagination";
 import Filters from "./Filters";
-import LineChart from "./LineChart";
+// import LineChart from "./LineChart";
 
 export const TestRunTable: React.FC = () => {
   //input data from context

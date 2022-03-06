@@ -3,23 +3,3 @@ th {
     font-family: Segoe UI, Regular;
 }
 
-.button {
-    display: flex;
-    text-transform: uppercase;
-    width: 100px;
-    height: 33px;
-    text-align: center;
-    border: solid 1px;
-    border-radius: 5px;
-    font-size: 16px;
-    justify-content: center;
-    align-items: center;
-}
-
-.button.passed{
-    color: #5AC16B;
-}
-
-.button.failed{
-    color: #C15A5A;
-}
