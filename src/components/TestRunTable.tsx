@@ -7,6 +7,7 @@ import "./testRunTable.scss";
 import AddProjectModal from "./AddProjectModal";
 import Pagination from "./Pagination";
 import Filters from "./Filters";
+import LineChart from "./LineChart";
 
 export const TestRunTable: React.FC = () => {
   //input data from context
@@ -49,7 +50,7 @@ export const TestRunTable: React.FC = () => {
         <thead>
           <tr>
             {columnsHeaders.map((header) => (
-              <th scope="col" className="pb-0">
+              <th scope="col" className="headers">
                 {header}
               </th>
             ))}
@@ -73,6 +74,7 @@ export const TestRunTable: React.FC = () => {
       >
         This is Modal Content!
       </AddProjectModal>
+      {/* <LineChart /> */}
     </>
   );
 };

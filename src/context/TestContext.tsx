@@ -27,8 +27,7 @@ const COLUMNS = [
   { accessor: "PFR", Header: "PFR" },
   { accessor: "status", Header: "Status" },
   { accessor: "startDate", Header: "Start Date" },
-  { accessor: "endDate", Header: "End Date" },
-  { accessor: "actions", Header: "Actions" }
+  { accessor: "endDate", Header: "End Date" }
 ];
 
 const TESTS = [

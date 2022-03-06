@@ -1,5 +1,6 @@
 import "../index.css";
 import { ITableData } from "../interfaces/Interfaces";
+import './TestRun.scss'
 
 type TestProps = {
   test: ITableData;
@@ -18,15 +19,10 @@ export const TestRun = ({ test }: TestProps) => {
       <td>{test.PFR}</td>
       <td>
         <div
-          style={
-            test.status === "passed"
-              ? { border: "1px solid  #5AC16B", borderRadius: "5px" }
-              : { border: "1px solid #C15A5A", borderRadius: "5px" }
-          }
           className={
             test.status === "passed"
-              ? "m-0 p-0 text-success text-uppercase text-center"
-              : "m-0 p-0 text-danger text-uppercase text-center"
+              ? "button passed"
+              : "button failed"
           }
         >
           {test.status}
@@ -34,14 +30,6 @@ export const TestRun = ({ test }: TestProps) => {
       </td>
       <td>{test.startDate}</td>
       <td>{test.endDate}</td>
-      <td>
-        <button type="button" className="btn btn-success">
-
-        </button>
-        <button type="button" className="btn btn-danger">
-     
-        </button>
-      </td>
     </>
   );
 };

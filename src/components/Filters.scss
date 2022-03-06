@@ -10,20 +10,24 @@
     align-items: flex-end;
     
     .button {
-      width: 55px;
-      height: 20px;
-      margin-bottom: 8px;
-      text-decoration: none;
-      border: solid 0.5px;
+      display: flex;
+      text-transform: uppercase;
+      width: 100px;
+      height: 33px;
+      text-align: center;
+      border: solid 1px;
       border-radius: 5px;
-      color: black;
+      font-size: 16px;
+      justify-content: center;
+      align-items: center;
     }
+
     .button.failed {
-      color: red;
+      color: #C15A5A;
     }
 
     .button.passed {
-      color: green
+      color: #5AC16B;
     }
 
     .button.all {
